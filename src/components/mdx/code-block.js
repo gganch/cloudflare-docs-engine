@@ -19,9 +19,10 @@ const codeBlockClassName = theme => {
 }
 
 const addNewlineToEmptyLine = line => {
-  if (line && line.length === 1 && line[0].empty) {
-    // Improves copy/paste behavior
-    line[0].content = "\n"
+  // addresses pasting bug on firefox by creating a new line at the end of a code block row
+  
+  if ( line && (line[line.length-1].content.trim() === "" || line[0].content.trim() === "")) {
+    line[line.length-1].content = line[line.length-1].content + " \n";
   }
 
   return line
@@ -106,7 +107,7 @@ const CodeBlock = props => {
                       {addNewlineToEmptyLine(line).map((token, key) => (
                         <span key={key} {...tokenProps(getTokenProps({ token, key }))}/>
                       ))}
-                    </span>
+                    </span>              
                   </span>
                 ))}
               </span>
